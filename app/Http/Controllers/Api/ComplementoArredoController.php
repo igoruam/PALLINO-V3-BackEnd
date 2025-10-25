@@ -3,47 +3,63 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ComplementoArredo;
 use Illuminate\Http\Request;
 
 class ComplementoArredoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $complementi = ComplementoArredo::with('marchio')->get();
+        return response()->json($complementi);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'prodotto' => 'required|string|max:255',
+            'marchio_id' => 'required|exists:marchios,id',
+            'disponibilita' => 'nullable|integer|min:0',
+            'misure' => 'nullable|string|max:255',
+            'tipo' => 'nullable|string|max:255',
+            'prezzo_senza_iva' => 'nullable|numeric|min:0',
+            'prezzo_con_iva' => 'nullable|numeric|min:0',
+            'foto' => 'nullable|string|max:255',
+        ]);
+
+        $complemento = ComplementoArredo::create($validated);
+        return response()->json($complemento, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $complemento = ComplementoArredo::with('marchio')->findOrFail($id);
+        return response()->json($complemento);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $complemento = ComplementoArredo::findOrFail($id);
+
+        $validated = $request->validate([
+            'prodotto' => 'sometimes|required|string|max:255',
+            'marchio_id' => 'sometimes|required|exists:marchios,id',
+            'disponibilita' => 'nullable|integer|min:0',
+            'misure' => 'nullable|string|max:255',
+            'tipo' => 'nullable|string|max:255',
+            'prezzo_senza_iva' => 'nullable|numeric|min:0',
+            'prezzo_con_iva' => 'nullable|numeric|min:0',
+            'foto' => 'nullable|string|max:255',
+        ]);
+
+        $complemento->update($validated);
+        return response()->json($complemento);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $complemento = ComplementoArredo::findOrFail($id);
+        $complemento->delete();
+        return response()->json(null, 204);
     }
 }

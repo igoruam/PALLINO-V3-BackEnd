@@ -3,47 +3,57 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Referente;
 use Illuminate\Http\Request;
 
 class ReferenteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $referenti = Referente::with('marchio')->get();
+        return response()->json($referenti);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'marchio_id' => 'required|exists:marchios,id',
+            'nome' => 'required|string|max:255',
+            'cognome' => 'required|string|max:255',
+            'numero_telefono' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+        ]);
+
+        $referente = Referente::create($validated);
+        return response()->json($referente, 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $referente = Referente::with('marchio')->findOrFail($id);
+        return response()->json($referente);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $referente = Referente::findOrFail($id);
+
+        $validated = $request->validate([
+            'marchio_id' => 'sometimes|required|exists:marchios,id',
+            'nome' => 'sometimes|required|string|max:255',
+            'cognome' => 'sometimes|required|string|max:255',
+            'numero_telefono' => 'nullable|string|max:255',
+            'email' => 'nullable|email|max:255',
+        ]);
+
+        $referente->update($validated);
+        return response()->json($referente);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $referente = Referente::findOrFail($id);
+        $referente->delete();
+        return response()->json(null, 204);
     }
 }
