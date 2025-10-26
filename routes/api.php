@@ -11,6 +11,20 @@ use App\Http\Controllers\Api\IlluminazioneController;
 use App\Http\Controllers\Api\TermoarredoController;
 use App\Http\Controllers\Api\BoxDocciaController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+
+Route::get('images/{path}', function ($path) {
+    $path = urldecode($path);
+
+    if (!Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+
+    $file = Storage::disk('public')->get($path);
+    $mimeType = Storage::disk('public')->mimeType($path);
+
+    return response($file, 200)->header('Content-Type', $mimeType);
+})->where('path', '.*');
 
 Route::apiResource('marchi', MarchioController::class);
 Route::apiResource('referenti', ReferenteController::class);

@@ -4,7 +4,9 @@
       "Bash(php artisan:*)",
       "Bash(composer dump-autoload:*)",
       "Bash(php -l:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(dir:*)",
+      "Bash(php test-storage.php:*)"
     ],
     "deny": [],
     "ask": []

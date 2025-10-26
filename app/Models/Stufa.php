@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasFotoUrl;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Stufa extends Model
 {
+    use HasFotoUrl;
     protected $fillable = [
         'prodotto',
         'tipo',
