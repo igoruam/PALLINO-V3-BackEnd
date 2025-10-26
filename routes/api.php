@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('marchi', MarchioController::class);
 Route::apiResource('referenti', ReferenteController::class);
-Route::apiResource('pavimenti-rivestimenti-battiscopa', PavimentoRivestimentoBattiscopaController::class);
+Route::apiResource('pavimenti-rivestimenti-battiscopa', PavimentoRivestimentoBattiscopaController::class)
+    ->parameters(['pavimenti-rivestimenti-battiscopa' => 'item']);
 Route::apiResource('stufe', StufaController::class);
 Route::apiResource('sanitari', SanitarioController::class);
 Route::apiResource('rubinetterie', RubinettteriaController::class);
